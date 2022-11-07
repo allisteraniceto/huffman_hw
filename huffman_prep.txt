@@ -37,3 +37,7 @@ huffman tree:
     -first few bits are the path to the root node
     -when you encounter 0 node, next 8 bits is ascii value character
     -make 2 new nodes on top with default value one 1, output character
+        if new node
+            path to root node starts at 0
+        else if character is encountered again
+            path to character
