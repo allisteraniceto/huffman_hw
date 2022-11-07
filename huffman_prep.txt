@@ -8,6 +8,8 @@ max heap:
 
 0 node will always be at the bottom
 -0 node contains characters that havent been used yet
+-backbone like structure
+-when you encounter zero node, next 8 bits are ascii value of character
 
 how array (thread) is enconded:
 -path to 0 node or a character
@@ -31,4 +33,7 @@ huffman tree:
     -after every encounter, increment parent count by 1 up along the tree.
 
     decoding
-    -
+    -start with zero node
+    -first few bits are the path to the root node
+    -when you encounter 0 node, next 8 bits is ascii value character
+    -make 2 new nodes on top with default value one 1, output character
