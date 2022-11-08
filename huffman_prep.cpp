@@ -1,10 +1,34 @@
+#include <iostream>
+using namespace std;
 //Adaptive Huffman Prep
 
 //./huff.exe encode alpha.txt message.txt.encoded - message.txt.encoded
 //./huff.exe decode alpha.txt message.txt.decoded - message.txt.decoded
 
-class AdaptiveHuffman{
-    
+class AdaptiveHuffmanNode{
+private:
+    AdaptiveHuffmanNode* parent;
+    AdaptiveHuffmanNode* left;
+    AdaptiveHuffmanNode* right;
+    AdaptiveHuffmanNode* prev;
+    AdaptiveHuffmanNode* next;
+    int count;
+    char character;
+public:
+    AdaptiveHuffmanNode(){
+        //defualt constructor
+        //set all attributes to nullptr, NULL, or 0;
+    }
+    AdaptiveHuffmanNode(string alphabet){
+        //take alphabet string as an argument
+        //
+    }
+    void encode(){
+
+    }
+    void decode(){
+        
+    }
 };
 
 int main(int argc, char const *argv[]){
@@ -16,7 +40,7 @@ int main(int argc, char const *argv[]){
     //else if decode command
     //else incorrect command
 
-    //get alphabet from alphabe.txt
+    //get alphabet from alphabet.txt
     //open alphabet file
     //read single line into string variable (alphabet.txt only has one string)
     //*remember: close file
@@ -26,9 +50,11 @@ int main(int argc, char const *argv[]){
     //read each line and append to a string
     //*remember: close file
 
-    //create AdaptiveHuffman object
-
-
+    //create AdaptiveHuffman object and take in alphabet string as an argument
+    //if encode command
+    //  call encode method
+    //else if decode command
+    //  call decode method
 }
 
 /*max heap: 
