@@ -5,15 +5,19 @@ using namespace std;
 //./huff.exe encode alpha.txt message.txt.encoded - message.txt.encoded
 //./huff.exe decode alpha.txt message.txt.decoded - message.txt.decoded
 
+const int NUM_OF_CHARACTERS=256; //number of ascii characters
+const int NUM_OF_ARGUMENTS=4; //# of arguments
+
 class AdaptiveHuffmanNode{
 private:
-    AdaptiveHuffmanNode* parent;
-    AdaptiveHuffmanNode* left;
-    AdaptiveHuffmanNode* right;
-    AdaptiveHuffmanNode* prev;
-    AdaptiveHuffmanNode* next;
+    AdaptiveHuffmanNode* parent; //pointer to parent
+    AdaptiveHuffmanNode* left; //pointer to left node
+    AdaptiveHuffmanNode* right; //pointer to right node
+    AdaptiveHuffmanNode* prev; //pointer to prev node in thread
+    AdaptiveHuffmanNode* next; //pointer to next node in thread
     int count;
     char character;
+    char* alphabet_arr[NUM_OF_CHARACTERS]; //array of character poitners
 public:
     AdaptiveHuffmanNode(){
         //defualt constructor
@@ -27,10 +31,10 @@ public:
 
     }
     void decode(){
-        
+
     }
 };
-
+        //# of args   //arg strings or char array
 int main(int argc, char const *argv[]){
     //check for correct # of arguments
     //if too little OR too many arguments, prompt user to enter again
@@ -39,6 +43,7 @@ int main(int argc, char const *argv[]){
     //if encode command
     //else if decode command
     //else incorrect command
+    //  return -1;
 
     //get alphabet from alphabet.txt
     //open alphabet file
@@ -55,6 +60,7 @@ int main(int argc, char const *argv[]){
     //  call encode method
     //else if decode command
     //  call decode method
+    return 0;
 }
 
 /*max heap: 
