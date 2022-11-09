@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 //Adaptive Huffman Prep
 
@@ -12,6 +13,10 @@ class AdaptiveHuffmanTree{
 private:
     AdaptiveHuffmanNode* root;
     char* alphabet_arr[NUM_OF_CHARACTERS]; //array of character pointers
+    vector<char> message; //use char vector (we dont know how long the message is, use push_back())
+    vector<char> encode;
+    vector<char> decode;
+
 public:
     AdaptiveHuffmanTree(){ //defualt constructor
         this->root=nullptr;
@@ -19,28 +24,42 @@ public:
     AdaptiveHuffmanTree(string alphabet){
         //convert string into char of array using strcpy
         //copy into string into alphabet_arr
+        //root node default 0 node
     }
     string encode(string message){
         //message string as a parameter and returns encoded message
         //
-        //if (root empty)
-        //  make zero node
-        //else if (encounter a new character)
-        //  make a sibling node, a new root node
-        //  make element character pointer point to sibling node
-        //else if (encounter a character again)
-        //  sibling property
+        //make message into char array
+        //
+        //for loop through message char vector (int i=0; i<message_arr.size(); i++)
+        //
+        //  message_arr[i];
+        //  if (encounter a new character)
+        //      make a sibling node, a new root node
+        //      make element character pointer point to sibling node
+        //  else if (encounter a character again)
+        //      sibling property
         //      if (leader is parent of count)
         //          just increment parent node, up to the root node
-        //      else if (leader is NOT parent)
-        //          swap position with sibling
+        //  else if (leader is NOT parent)
+        //      swap position with sibling
         //
+        //end loop
         //
-
+        //convert encode vector into string 
+        //
+        //return encode string
     }
     string decode(string encoded){
         //encoded string as parameter and returns decoded message
         //
+        //convert encoded string into char array
+        //
+        //for loop through encoded char array 
+        //
+        //  if (encounter a new character)
+        //      
+        //  
          
     }
     void newCharacter(){
