@@ -38,11 +38,7 @@ public:
         //      make a sibling node, a new root node
         //      make element character pointer point to sibling node
         //  else if (encounter a character again)
-        //      sibling property
-        //      if (leader is parent of count)
-        //          just increment parent node, up to the root node
-        //  else if (leader is NOT parent)
-        //      swap position with sibling
+        //      call check sibling
         //
         //end loop
         //
@@ -58,12 +54,28 @@ public:
         //for loop through encoded char array 
         //
         //  if (encounter a new character)
-        //      
-        //  
+        //      make 2 new nodes, a new sibing and a new parent (both with count 1)
+        //      make element character point to sibling node
+        //  else if (encounter character again)
+        //      increment parent node
+        //      call check sibling
+        //
+        //end loop  
          
     }
     void newCharacter(){
 
+    }
+    AdaptiveHuffmanNode* checkSibling(AdaptiveHuffmanNode* node){
+        //takes 0 node as input and returns huffman
+        //if huffman violates sibling property
+        //  rearrange nodes ADD HERE
+        //  if (leader is parent of count)
+        //      JUST increment parent count by one, up to the root node
+        //  else if
+        //      swap position with leader 
+        //else (if no violation)
+        //  return node 
     }
 
 };
