@@ -8,6 +8,46 @@ using namespace std;
 const int NUM_OF_CHARACTERS=256; //number of ascii characters
 const int NUM_OF_ARGUMENTS=4; //# of arguments
 
+class AdaptiveHuffmanTree{
+private:
+    AdaptiveHuffmanNode* root;
+    char* alphabet_arr[NUM_OF_CHARACTERS]; //array of character pointers
+public:
+    AdaptiveHuffmanTree(){ //defualt constructor
+        this->root=nullptr;
+    }
+    AdaptiveHuffmanTree(string alphabet){
+        //convert string into char of array using strcpy
+        //copy into string into alphabet_arr
+    }
+    string encode(string message){
+        //message string as a parameter and returns encoded message
+        //
+        //if (root empty)
+        //  make zero node
+        //else if (encounter a new character)
+        //  make a sibling node, a new root node
+        //  make element character pointer point to sibling node
+        //else if (encounter a character again)
+        //  sibling property
+        //      if (leader is parent of count)
+        //          just increment parent node, up to the root node
+        //      else if (leader is NOT parent)
+        //          swap position with sibling
+        //
+        //
+
+    }
+    string decode(string encoded){
+        //encoded string as parameter and returns decoded message
+        //
+         
+    }
+    void newCharacter(){
+
+    }
+
+};
 class AdaptiveHuffmanNode{
 private:
     AdaptiveHuffmanNode* parent; //pointer to parent
@@ -17,22 +57,12 @@ private:
     AdaptiveHuffmanNode* next; //pointer to next node in thread
     int count;
     char character;
-    char* alphabet_arr[NUM_OF_CHARACTERS]; //array of character poitners
 public:
     AdaptiveHuffmanNode(){
         //defualt constructor
         //set all attributes to nullptr, NULL, or 0;
     }
-    AdaptiveHuffmanNode(string alphabet){
-        //take alphabet string as an argument
-        //
-    }
-    void encode(){
-
-    }
-    void decode(){
-
-    }
+    
 };
         //# of args   //arg strings or char array
 int main(int argc, char const *argv[]){
@@ -55,7 +85,7 @@ int main(int argc, char const *argv[]){
     //read each line and append to a string
     //*remember: close file
 
-    //create AdaptiveHuffman object and take in alphabet string as an argument
+    //create AdaptiveHuffmanTree object and take in alphabet string as an argument
     //if encode command
     //  call encode method
     //else if decode command
@@ -63,7 +93,7 @@ int main(int argc, char const *argv[]){
     return 0;
 }
 
-/*max heap: 
+/*
 -largest value (# of characters) on top
 -create array of characters (0's or 1's) from right to left
 -nodes have counter and character attributes
