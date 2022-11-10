@@ -38,10 +38,11 @@ public:
         //  if (encounter a new character)
         //      make a sibling node, a new root node
         //      make element character pointer point to sibling node
+        //      append path to root node then ascii value of character in binary
         //      
         //  else if (encounter a character again)
         //      call check sibling
-        //      append path to root node (0's and 1's) 
+        //      append path to root node (0's and 1's) and 1
         //
         //end loop
         //
@@ -57,16 +58,18 @@ public:
         //
         //for loop through encoded char array 
         //
-        //  if (encounter a new character)
+        //  if (encounter a new character a.k.a hit 0 node)
         //      make 2 new nodes, a new sibing and a new parent (both with count 1)
         //      make element character point to sibling node
+        //      get next 8 elements and convert binary value to ascii character then append
         //  else if (encounter character again)
         //      increment parent node
         //      call check sibling
-        //   
+        //      when node is found, append character to message
         //
         //end loop 
-         
+        //
+        //return message
     }
     void newCharacter(){
 
