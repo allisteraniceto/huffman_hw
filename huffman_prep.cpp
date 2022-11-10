@@ -13,9 +13,9 @@ class AdaptiveHuffmanTree{
 private:
     AdaptiveHuffmanNode* root;
     char* alphabet_arr[NUM_OF_CHARACTERS]; //array of character pointers
-    vector<char> message; //use char vector (we dont know how long the message is, use push_back())
-    vector<char> encode;
-    vector<char> decode;
+    string message; 
+    string encode;
+    string decode;
 
 public:
     AdaptiveHuffmanTree(){ //defualt constructor
@@ -28,8 +28,9 @@ public:
     }
     string encode(string message){
         //message string as a parameter and returns encoded message
+        //vector<char> message; //use char vector (we dont know how long the message is, use push_back())
         //
-        //make message into char array
+        //copy message into char array (vector)
         //
         //for loop through message char vector (int i=0; i<message_arr.size(); i++)
         //
@@ -37,8 +38,10 @@ public:
         //  if (encounter a new character)
         //      make a sibling node, a new root node
         //      make element character pointer point to sibling node
+        //      
         //  else if (encounter a character again)
         //      call check sibling
+        //      append path to root node (0's and 1's) 
         //
         //end loop
         //
@@ -48,6 +51,7 @@ public:
     }
     string decode(string encoded){
         //encoded string as parameter and returns decoded message
+        //vector<char> encoded
         //
         //convert encoded string into char array
         //
@@ -59,8 +63,9 @@ public:
         //  else if (encounter character again)
         //      increment parent node
         //      call check sibling
+        //   
         //
-        //end loop  
+        //end loop 
          
     }
     void newCharacter(){
