@@ -10,8 +10,8 @@ using namespace std;
 //./huff.exe encode alpha.txt message.txt.encoded - message.txt.encoded
 //./huff.exe decode alpha.txt message.txt.decoded - message.txt.decoded
 
-const int NUM_OF_CHARACTERS=256; //number of ascii characters
-const int NUM_OF_ARGUMENTS=4; //# of arguments
+// const int NUM_OF_CHARACTERS=256; //number of ascii characters
+// const int NUM_OF_ARGUMENTS=4; //# of arguments
 
 
         //# of args   //arg strings or char array
@@ -40,6 +40,8 @@ int main(int argc, char const *argv[]){
     //  call encode method
     //else if decode command
     //  call decode method
+    char a='a';
+    cout << (unsigned int)a << endl;
     return 0;
 }
 

@@ -1,7 +1,8 @@
-#pragma once 
+#ifndef HUFFMAN_H
+#define HUFFMAN_H
+
 #include <iostream>
 #include <cstring>
-#include <vector>
 using namespace std;
 
 //remember*: to output path to character, start from the character node all the way up
@@ -25,11 +26,15 @@ private:
     int count;
     char character;
 public:
-    AdaptiveHuffmanNode(){
+    AdaptiveHuffmanNode();
         //defualt constructor
         //set all attributes to nullptr, NULL, or 0;
+    char getCharacter(){
+        return character;
     }
-    
+    void setCharacter(char character){
+        this->character=character;
+    }
 };
 
 
@@ -37,18 +42,21 @@ class AdaptiveHuffman{
 private:
     AdaptiveHuffmanNode* root;
     AdaptiveHuffmanNode* zero;
-    char* alphabet_arr[NUM_OF_CHARACTERS]; //array of character pointers
+    AdaptiveHuffmanNode* alphabet_arr[NUM_OF_CHARACTERS]; //array of AdaptiveHuffman node pointers
+    string alphabet;
+    char alphabetValid[NUM_OF_CHARACTERS];
     string message; 
     string encoded;
 
 public:
-    AdaptiveHuffman(){};
+    AdaptiveHuffman();
         //defualt constructor
-    AdaptiveHuffman(string alphabet){};
+    AdaptiveHuffman(string);
         //convert string into char of array using strcpy
         //copy into string into alphabet_arr
         //root node default 0 node
-    string encode(string message){};
+    AdaptiveHuffmanNode* newCharacter();
+    string encode(string);
         //message string as a parameter and returns encoded message
         //vector<char> message; //use char vector (we dont know how long the message is, use push_back())
         //
@@ -71,7 +79,7 @@ public:
         //convert encode vector into string 
         //
         //return encode string
-    string decode(string encoded){};
+    string decode(string);
         //encoded string as parameter and returns decoded message
         //vector<char> encoded
         //
@@ -91,8 +99,7 @@ public:
         //end loop 
         //
         //return message
-    void newCharacter(){};
-    AdaptiveHuffmanNode* checkSibling(AdaptiveHuffmanNode* node){};
+    AdaptiveHuffmanNode* checkSibling(AdaptiveHuffmanNode*);
         //takes 0 node as input and returns huffman
         //if huffman violates sibling property
         //  rearrange nodes ADD HERE
@@ -102,20 +109,56 @@ public:
         //      swap position with leader 
         //else (if no violation)
         //  return node 
+    char* createAlphabetArray(string);
+    bool validateAlphabet(int);
 };
 
 //TREE METHODS:
 AdaptiveHuffman::AdaptiveHuffman(){
-    this->root=zero=nullptr;
+    this->root=this->zero=nullptr;
     this->alphabet_arr[NUM_OF_CHARACTERS]={0};
-    this->message=encoded="";
+    this->alphabetValid[NUM_OF_CHARACTERS]={0};
+    this->message=this->encoded="";
 }
-AdaptiveHuffman::AdaptiveHuffman(string message){
+AdaptiveHuffman::AdaptiveHuffman(string alphabet){
     this->root= new AdaptiveHuffmanNode(); //create default zero node which is also root
-    this->message=message;
-    for (int i = 0; i < NUM_OF_CHARACTERS; i++){
-        alphabet_arr[0]->zero;
-    } 
+    this->alphabet=alphabet;
+    for (int i = 0; i < NUM_OF_CHARACTERS; i++){ //all pointers in alphabet array point to zero node
+        alphabet_arr[i]=zero;
+    }
+    this->message=this->encoded="";
+}
+char* AdaptiveHuffman::createAlphabetArray(string alphabet){
+    char* c = new char[alphabet.length()+1];
+    strcpy(c, alphabet.c_str());
+    for (int i=0; i<alphabet.length(); i++){
+        int asciiVal=(unsigned int)c[i]; //get ascii value from 1st character in alphabet
+        alphabetValid[asciiVal];
+    }
+}
+bool AdaptiveHuffman::validateAlphabet(int asciiVal){
+    if (alphabetValid[asciiVal]==0) //if character not found in element, return false
+        return false;
+    return true; //else true
+}
+string AdaptiveHuffman::encode(string message){
+    char* msg = new char[message.length()+1]; //+1 for null terminated character
+    strcpy(msg, message.c_str()); //convert string into char array
+    for (int i=0; i < message.length(); i++){
+        int asciiVal=(unsigned int)msg[i];
+        while(validateAlphabet(asciiVal)){ //while character is in alphabet
+            if (alphabet_arr[asciiVal]==zero){ //if alphabet char pointer points to zero, new character!!
+
+            }
+            else if (alphabet_arr[asciiVal]!=zero){
+
+            }
+        }
+    }
+
+}
+string AdaptiveHuffman::decode(string encoded){
+
 }
 
 //can use .length to get amount of char in string
@@ -124,5 +167,7 @@ AdaptiveHuffman::AdaptiveHuffman(string message){
 AdaptiveHuffmanNode::AdaptiveHuffmanNode(){
     this->parent=left=right=prev=next=nullptr;
     this->count=0;
-    this->character=NULL;
+    this->character=0;
 }
+
+#endif
