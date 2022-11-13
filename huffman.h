@@ -17,7 +17,7 @@ const int NUM_OF_CHARACTERS=256; //number of ascii characters
 const int NUM_OF_ARGUMENTS=4; //# of arguments
 
 class AdaptiveHuffmanNode{
-private:
+public:
     AdaptiveHuffmanNode* parent; //pointer to parent
     AdaptiveHuffmanNode* left; //pointer to left node
     AdaptiveHuffmanNode* right; //pointer to right node
@@ -25,15 +25,19 @@ private:
     AdaptiveHuffmanNode* next; //pointer to next node in thread
     int count;
     char character;
-public:
-    AdaptiveHuffmanNode();
+    AdaptiveHuffmanNode(int);
         //defualt constructor
         //set all attributes to nullptr, NULL, or 0;
+    AdaptiveHuffmanNode(int, char);
+        //overloaded constructor that takes in count and character to put in node
     char getCharacter(){
         return character;
     }
     void setCharacter(char character){
         this->character=character;
+    }
+    void setNext(AdaptiveHuffmanNode* node){
+        this->next=node;
     }
 };
 
@@ -55,7 +59,7 @@ public:
         //convert string into char of array using strcpy
         //copy into string into alphabet_arr
         //root node default 0 node
-    AdaptiveHuffmanNode* newCharacter();
+    AdaptiveHuffmanNode* newCharacter(AdaptiveHuffmanNode*, char);
     string encode(string);
         //message string as a parameter and returns encoded message
         //vector<char> message; //use char vector (we dont know how long the message is, use push_back())
@@ -111,6 +115,7 @@ public:
         //  return node 
     char* createAlphabetArray(string);
     bool validateAlphabet(int);
+    bool checkLeader();
 };
 
 //TREE METHODS:
@@ -121,18 +126,31 @@ AdaptiveHuffman::AdaptiveHuffman(){
     this->message=this->encoded="";
 }
 AdaptiveHuffman::AdaptiveHuffman(string alphabet){
-    this->root= new AdaptiveHuffmanNode(); //create default zero node which is also root
+    this->root= new AdaptiveHuffmanNode(0); //create default zero node which is also root
     this->alphabet=alphabet;
     for (int i = 0; i < NUM_OF_CHARACTERS; i++){ //all pointers in alphabet array point to zero node
         alphabet_arr[i]=zero;
     }
     this->message=this->encoded="";
 }
+AdaptiveHuffmanNode* AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* root, char c){
+    if (root==zero){ //base case: root points to zero node
+        root= new AdaptiveHuffmanNode(1); //new parent node
+        root->left=zero; //left points to zero node
+        root->right= new AdaptiveHuffmanNode(1, c); //right child with character
+        root->next=root->right;
+        alphabet_arr[(unsigned int)c]=root->right; //ascii value array element will point to character node
+    }
+    else if (root!=zero){
+        root->left=newCharacter(root->left, c);
+    }
+
+}
 char* AdaptiveHuffman::createAlphabetArray(string alphabet){
     char* c = new char[alphabet.length()+1];
     strcpy(c, alphabet.c_str());
     for (int i=0; i<alphabet.length(); i++){
-        int asciiVal=(unsigned int)c[i]; //get ascii value from 1st character in alphabet
+        int asciiVal=(unsigned int)c[i]; //get ascii value from 1st character in alphabet (type cast character)
         alphabetValid[asciiVal];
     }
 }
@@ -164,10 +182,15 @@ string AdaptiveHuffman::decode(string encoded){
 //can use .length to get amount of char in string
 
 //NODE METHODS:
-AdaptiveHuffmanNode::AdaptiveHuffmanNode(){
+AdaptiveHuffmanNode::AdaptiveHuffmanNode(int count){
     this->parent=left=right=prev=next=nullptr;
-    this->count=0;
+    this->count=count;
     this->character=0;
+}
+AdaptiveHuffmanNode::AdaptiveHuffmanNode(int count, char character){
+    this->parent=left=right=prev=next=nullptr;
+    this->count=count;
+    this->character=character;
 }
 
 #endif
