@@ -116,6 +116,7 @@ public:
     char* createAlphabetArray(string);
     bool validateAlphabet(int);
     bool checkLeader();
+    string decimalToBinary(int);
 };
 
 //TREE METHODS:
@@ -132,6 +133,17 @@ AdaptiveHuffman::AdaptiveHuffman(string alphabet){
         alphabet_arr[i]=zero;
     }
     this->message=this->encoded="";
+}
+string AdaptiveHuffman::decimalToBinary(int ascii){ //from: Program for decimal to binary conversion. GeeksforGeeks. (2022, July 17). Retrieved November 13, 2022, from https://www.geeksforgeeks.org/program-decimal-binary-conversion/ 
+    string binary= "";
+    for (int i=7; i>=0; i--){ //8 bit representation
+        int k = ascii >> i;
+        if (k & 1)
+            binary+="1";
+        else
+            binary+="0";
+    }
+    return binary;
 }
 AdaptiveHuffmanNode* AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* root, char c){
     if (root==zero){ //base case: root points to zero node
