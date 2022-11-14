@@ -51,6 +51,7 @@ private:
     char alphabetValid[NUM_OF_CHARACTERS];
     string message; 
     string encoded;
+    string pathZero;
 
 public:
     AdaptiveHuffman();
@@ -59,12 +60,10 @@ public:
         //convert string into char of array using strcpy
         //copy into string into alphabet_arr
         //root node default 0 node
-    AdaptiveHuffmanNode* newCharacter(AdaptiveHuffmanNode*, char);
+    void newCharacter(AdaptiveHuffmanNode*, char);
     string encode(string);
         //message string as a parameter and returns encoded message
-        //vector<char> message; //use char vector (we dont know how long the message is, use push_back())
-        //
-        //copy message into char array (vector)
+        //copy message into char array
         //
         //for loop through message char vector (int i=0; i<message_arr.size(); i++)
         //
@@ -85,7 +84,6 @@ public:
         //return encode string
     string decode(string);
         //encoded string as parameter and returns decoded message
-        //vector<char> encoded
         //
         //convert encoded string into char array
         //
@@ -117,6 +115,9 @@ public:
     bool validateAlphabet(int);
     bool checkLeader();
     string decimalToBinary(int);
+    AdaptiveHuffmanNode* pathToZeroNode(AdaptiveHuffmanNode*);
+        //start from zero node and work your way up to the root node
+    string reverseString(string);
 };
 
 //TREE METHODS:
@@ -134,6 +135,19 @@ AdaptiveHuffman::AdaptiveHuffman(string alphabet){
     }
     this->message=this->encoded="";
 }
+AdaptiveHuffmanNode* AdaptiveHuffman::pathToZeroNode(AdaptiveHuffmanNode* zero){
+    if (zero==root){
+        return;
+    }
+    else if (zero==zero->parent->left){ //if left child
+        pathZero+="0";
+        zero->parent=pathToZeroNode(zero->parent);
+    }
+    else if (zero==zero->parent->right){ //if right child
+        pathZero+="1";
+        zero->parent=pathToZeroNode(zero->parent);
+    }
+}
 string AdaptiveHuffman::decimalToBinary(int ascii){ //from: Program for decimal to binary conversion. GeeksforGeeks. (2022, July 17). Retrieved November 13, 2022, from https://www.geeksforgeeks.org/program-decimal-binary-conversion/ 
     string binary= "";
     for (int i=7; i>=0; i--){ //8 bit representation
@@ -145,18 +159,24 @@ string AdaptiveHuffman::decimalToBinary(int ascii){ //from: Program for decimal 
     }
     return binary;
 }
-AdaptiveHuffmanNode* AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* root, char c){
+void AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* root, char c){
+    int asciiVal=(unsigned int)c;
     if (root==zero){ //base case: root points to zero node
         root= new AdaptiveHuffmanNode(1); //new parent node
         root->left=zero; //left points to zero node
         root->right= new AdaptiveHuffmanNode(1, c); //right child with character
         root->next=root->right;
-        alphabet_arr[(unsigned int)c]=root->right; //ascii value array element will point to character node
+        alphabet_arr[asciiVal]=root->right; //ascii value array element will point to character node
+        encoded += "0" + decimalToBinary(asciiVal);
     }
     else if (root!=zero){
-        root->left=newCharacter(root->left, c);
-    }
+        //root->left=newCharacter(root->left, c);
+        zero->parent=new AdaptiveHuffmanNode(1);
+        zero->parent->right=new AdaptiveHuffmanNode(1, c);
+        zero->parent->parent->left=zero->parent; //original parent now points to new parent
 
+        encoded += pathZero + decimalToBinary(asciiVal); //REMEBER* add 
+    }
 }
 char* AdaptiveHuffman::createAlphabetArray(string alphabet){
     char* c = new char[alphabet.length()+1];
@@ -178,7 +198,7 @@ string AdaptiveHuffman::encode(string message){
         int asciiVal=(unsigned int)msg[i];
         while(validateAlphabet(asciiVal)){ //while character is in alphabet
             if (alphabet_arr[asciiVal]==zero){ //if alphabet char pointer points to zero, new character!!
-
+                newCharacter(root, msg[i]);
             }
             else if (alphabet_arr[asciiVal]!=zero){
 
