@@ -193,7 +193,7 @@ void AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* root, char c){
         alphabet_arr[asciiVal]=root->right; //ascii value array element will point to character node
         encoded += "0" + decimalToBinary(asciiVal);
     }
-    else if (root!=zero){
+    else if (root!=zero){ //start from the bottom
         //root->left=newCharacter(root->left, c);
         zero->parent=new AdaptiveHuffmanNode(1);
         zero->parent->right=new AdaptiveHuffmanNode(1, c);
