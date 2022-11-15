@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <cstring>
+#include <algorithm> //contains reverse function
 using namespace std;
 
 //remember*: to output path to character, start from the character node all the way up
@@ -38,6 +39,9 @@ public:
     }
     void setNext(AdaptiveHuffmanNode* node){
         this->next=node;
+    }
+    void incrementParent(){
+        count+=1;
     }
 };
 
@@ -118,13 +122,16 @@ public:
     AdaptiveHuffmanNode* pathToZeroNode(AdaptiveHuffmanNode*);
         //start from zero node and work your way up to the root node
     string reverseString(string);
+    void incrementParent(AdaptiveHuffmanNode*);
+    AdaptiveHuffmanNode* checkLeader(AdaptiveHuffmanNode*);
+
 };
 
 //TREE METHODS:
 AdaptiveHuffman::AdaptiveHuffman(){
     this->root=this->zero=nullptr;
-    this->alphabet_arr[NUM_OF_CHARACTERS]={0};
-    this->alphabetValid[NUM_OF_CHARACTERS]={0};
+    this->alphabet_arr[NUM_OF_CHARACTERS];
+    this->alphabetValid[NUM_OF_CHARACTERS];
     this->message=this->encoded="";
 }
 AdaptiveHuffman::AdaptiveHuffman(string alphabet){
@@ -135,17 +142,31 @@ AdaptiveHuffman::AdaptiveHuffman(string alphabet){
     }
     this->message=this->encoded="";
 }
+AdaptiveHuffmanNode* AdaptiveHuffman::checkLeader(AdaptiveHuffmanNode* zero){
+    if (zero->count < zero->prev->count){
+
+    }
+}
+string reverseString(string s){
+    reverse(s.begin(), s.end());
+}
+void AdaptiveHuffman::incrementParent(AdaptiveHuffmanNode* bottom){
+    while (bottom->parent!=nullptr){
+        bottom->parent->incrementParent(); //increment on the way up
+        incrementParent(bottom->parent);
+    }
+}
 AdaptiveHuffmanNode* AdaptiveHuffman::pathToZeroNode(AdaptiveHuffmanNode* zero){
     if (zero==root){
-        return;
+        return zero;
     }
     else if (zero==zero->parent->left){ //if left child
-        pathZero+="0";
         zero->parent=pathToZeroNode(zero->parent);
+        pathZero+="0"; //put it after recurseive def to get correct order (otherwise reversed)
     }
     else if (zero==zero->parent->right){ //if right child
-        pathZero+="1";
         zero->parent=pathToZeroNode(zero->parent);
+        pathZero+="1";
     }
 }
 string AdaptiveHuffman::decimalToBinary(int ascii){ //from: Program for decimal to binary conversion. GeeksforGeeks. (2022, July 17). Retrieved November 13, 2022, from https://www.geeksforgeeks.org/program-decimal-binary-conversion/ 
@@ -162,10 +183,13 @@ string AdaptiveHuffman::decimalToBinary(int ascii){ //from: Program for decimal 
 void AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* root, char c){
     int asciiVal=(unsigned int)c;
     if (root==zero){ //base case: root points to zero node
-        root= new AdaptiveHuffmanNode(1); //new parent node
-        root->left=zero; //left points to zero node
+        root= new AdaptiveHuffmanNode(1);   //new parent node
+        root->left=zero;                    //left points to zero node
         root->right= new AdaptiveHuffmanNode(1, c); //right child with character
-        root->next=root->right;
+        root->next=root->right;             //next is set to the right child
+        root->right->next=root->left;       //right child next set to left child
+        root->left->prev=root->right;
+        root->right->prev=root;             //right child prev to root;
         alphabet_arr[asciiVal]=root->right; //ascii value array element will point to character node
         encoded += "0" + decimalToBinary(asciiVal);
     }
@@ -174,7 +198,10 @@ void AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* root, char c){
         zero->parent=new AdaptiveHuffmanNode(1);
         zero->parent->right=new AdaptiveHuffmanNode(1, c);
         zero->parent->parent->left=zero->parent; //original parent now points to new parent
-
+        zero->parent->parent->next=zero->parent->parent->right;
+        zero->parent->parent->right->next=zero->parent;
+        zero->parent->next=alphabet_arr[asciiVal];
+        alphabet_arr[asciiVal]->next=zero;
         encoded += pathZero + decimalToBinary(asciiVal); //REMEBER* add 
     }
 }
