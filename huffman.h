@@ -40,7 +40,7 @@ public:
     void setNext(AdaptiveHuffmanNode* node){
         this->next=node;
     }
-    void incrementParent(){
+    void increment(){
         count+=1;
     }
 };
@@ -143,16 +143,22 @@ AdaptiveHuffman::AdaptiveHuffman(string alphabet){
     this->message=this->encoded="";
 }
 AdaptiveHuffmanNode* AdaptiveHuffman::checkLeader(AdaptiveHuffmanNode* zero){
-    if (zero->count < zero->prev->count){
+    if (zero->count < zero->prev->count){ //2 cases
+        if(zero->parent == leader){
 
+        }
+        else if (zero->parent != leader){
+            
+        }
     }
+    return zero;
 }
 string reverseString(string s){
     reverse(s.begin(), s.end());
 }
 void AdaptiveHuffman::incrementParent(AdaptiveHuffmanNode* bottom){
     while (bottom->parent!=nullptr){
-        bottom->parent->incrementParent(); //increment on the way up
+        bottom->parent->increment(); //increment on the way up
         incrementParent(bottom->parent);
     }
 }
@@ -200,8 +206,8 @@ void AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* root, char c){
         zero->parent->parent->left=zero->parent; //original parent now points to new parent
         zero->parent->parent->next=zero->parent->parent->right;
         zero->parent->parent->right->next=zero->parent;
-        zero->parent->next=alphabet_arr[asciiVal];
-        alphabet_arr[asciiVal]->next=zero;
+        zero->parent->next=zero->parent->right;
+        zero->parent->right->next=zero;
         encoded += pathZero + decimalToBinary(asciiVal); //REMEBER* add 
     }
 }
