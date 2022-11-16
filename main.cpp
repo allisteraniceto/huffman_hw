@@ -4,6 +4,11 @@
 #include "huffman.h"
 using namespace std;
 
+//TASKS:
+//-fix path to zero, missing one path
+//-start characters encounters agan
+//-implement and debug checkLeader and validate
+
 //remember*: to output path to character, start from the character node all the way up
 
 //Adaptive Huffman Prep
