@@ -119,7 +119,7 @@ public:
     bool validateAlphabet(int);
     bool checkLeader();
     string decimalToBinary(int);
-    AdaptiveHuffmanNode* pathToZeroNode(AdaptiveHuffmanNode*);
+    void pathToZeroNode(AdaptiveHuffmanNode*);
         //start from zero node and work your way up to the root node
     string reverseString(string);
     void incrementParent(AdaptiveHuffmanNode*);
@@ -190,16 +190,17 @@ void AdaptiveHuffman::incrementParent(AdaptiveHuffmanNode* node){
     }
     root->increment(); //increment the root
 }
-AdaptiveHuffmanNode* AdaptiveHuffman::pathToZeroNode(AdaptiveHuffmanNode* zero){
+void AdaptiveHuffman::pathToZeroNode(AdaptiveHuffmanNode* zero){
+    pathZero=""; //reset path to zero;
     if (zero==root){
-        return zero;
+        return;
     }
     else if (zero==zero->parent->left){ //if left child
-        zero->parent=pathToZeroNode(zero->parent);
+        pathToZeroNode(zero->parent);
         pathZero+="0"; //put it after recurseive def to get correct order (otherwise reversed)
     }
     else if (zero==zero->parent->right){ //if right child
-        zero->parent=pathToZeroNode(zero->parent);
+        pathToZeroNode(zero->parent);
         pathZero+="1";
     }
 }
@@ -214,33 +215,38 @@ string AdaptiveHuffman::decimalToBinary(int ascii){ //from: Program for decimal 
     }
     return binary;
 }
-AdaptiveHuffmanNode* AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* root, char c){
+AdaptiveHuffmanNode* AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* parent, char c){
     int asciiVal=(unsigned int)c;
-    if (root==zero){ //base case: root points to zero node
-        root= new AdaptiveHuffmanNode(1);   //new parent node
-        root->left=zero;                    //left points to zero node
-        root->right= new AdaptiveHuffmanNode(1, c); //right child with character
-        zero->parent=root;                  //zero parent now points to root
-        root->next=root->right;             //next is set to the right child
-        root->right->next=zero;       //right child next set to zero
-        zero->prev=root->right;             //zero prev points to right child
-        root->right->prev=root;             //right child prev to root;
-        alphabet_arr[asciiVal]=root->right; //ascii value array element will point to character node
+    if (parent==zero){ //base case: root points to zero node
+        parent= new AdaptiveHuffmanNode(1);   //new root node
+        parent->left=zero;                    //left points to zero node
+        parent->right= new AdaptiveHuffmanNode(1, c); //right child with character
+        zero->parent=parent;                  //zero parent now points to root
+        parent->next=parent->right;             //next is set to the right child
+        parent->right->next=zero;       //right child next set to zero
+        zero->prev=parent->right;             //zero prev points to right child
+        parent->right->prev=parent;             //right child prev to parent;
+        alphabet_arr[asciiVal]=parent->right; //ascii value array element will point to character node
         encoded += "0" + decimalToBinary(asciiVal);
     }
-    else if (root!=zero){ //start from the bottom
-        //root->left=newCharacter(root->left, c);
+    else if (parent!=zero){ //start from the bottom
+        //parent->left=newCharacter(parent->left, c);
         AdaptiveHuffmanNode* temp = zero->parent; //temp pointer to zero parent
         zero->parent=new AdaptiveHuffmanNode(1);
         zero->parent->right=new AdaptiveHuffmanNode(1, c);
+        zero->parent->parent=temp; //new node parent is original parent no
         temp->left=zero->parent; //original parent now points to new parent
+        temp->left->left=zero; //left child points to zero node
         temp->right->next=zero->parent;
         zero->parent->next=zero->parent->right;
         alphabet_arr[asciiVal]->next=zero;
-        incrementParent(zero->parent); //just increment parent if new character, no need to worry about leader
+        alphabet_arr[asciiVal]=zero->parent->right; //alphabet_arr element pointer points to character
+        parent=temp; //make parent point to top node
+        //incrementParent(zero->parent); //just increment parent if new character, no need to worry about leader
+        pathToZeroNode(zero);
         encoded += pathZero + decimalToBinary(asciiVal); //REMEBER* add 
     }
-    return root;
+    return parent;
 }
 void AdaptiveHuffman::createAlphabetArray(){
     char* c = new char[alphabet.length()+1];
@@ -265,7 +271,7 @@ string AdaptiveHuffman::encode(string message){
             if (alphabet_arr[asciiVal]==zero){ //if alphabet char pointer points to zero, new character!!
                 root=newCharacter(root, msg[i]);
             }
-            else if (alphabet_arr[asciiVal]!=zero){
+            else if (alphabet_arr[asciiVal]!=zero){//if character is encoutner again
 
             }
         }
