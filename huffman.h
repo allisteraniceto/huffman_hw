@@ -64,7 +64,7 @@ public:
         //convert string into char of array using strcpy
         //copy into string into alphabet_arr
         //root node default 0 node
-    void newCharacter(AdaptiveHuffmanNode*, char);
+    AdaptiveHuffmanNode* newCharacter(AdaptiveHuffmanNode*, char);
     string encode(string);
         //message string as a parameter and returns encoded message
         //copy message into char array
@@ -115,7 +115,7 @@ public:
         //      swap position with leader 
         //else (if no violation)
         //  return node 
-    char* createAlphabetArray(string);
+    void createAlphabetArray();
     bool validateAlphabet(int);
     bool checkLeader();
     string decimalToBinary(int);
@@ -138,7 +138,8 @@ AdaptiveHuffman::AdaptiveHuffman(){
     this->message=this->encoded="";
 }
 AdaptiveHuffman::AdaptiveHuffman(string alphabet){
-    this->root= new AdaptiveHuffmanNode(0); //create default zero node which is also root
+    this->zero= new AdaptiveHuffmanNode(0); //create default zero node which is also root
+    this->root=zero;
     this->alphabet=alphabet;
     for (int i = 0; i < NUM_OF_CHARACTERS; i++){ //all pointers in alphabet array point to zero node
         alphabet_arr[i]=zero;
@@ -163,6 +164,7 @@ AdaptiveHuffmanNode* AdaptiveHuffman::getLeader(AdaptiveHuffmanNode* leadNum){
     while (leadNum->count==leadNum->prev->count){ //while node count is still the same
         leadNum=leadNum->prev; //leadNum now points to next 
     }
+    return leadNum;
 }
 AdaptiveHuffmanNode* AdaptiveHuffman::checkLeader(AdaptiveHuffmanNode* node){
     AdaptiveHuffmanNode* leader;
@@ -212,41 +214,44 @@ string AdaptiveHuffman::decimalToBinary(int ascii){ //from: Program for decimal 
     }
     return binary;
 }
-void AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* root, char c){
+AdaptiveHuffmanNode* AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* root, char c){
     int asciiVal=(unsigned int)c;
     if (root==zero){ //base case: root points to zero node
         root= new AdaptiveHuffmanNode(1);   //new parent node
         root->left=zero;                    //left points to zero node
         root->right= new AdaptiveHuffmanNode(1, c); //right child with character
+        zero->parent=root;                  //zero parent now points to root
         root->next=root->right;             //next is set to the right child
-        root->right->next=root->left;       //right child next set to left child
-        root->left->prev=root->right;
+        root->right->next=zero;       //right child next set to zero
+        zero->prev=root->right;             //zero prev points to right child
         root->right->prev=root;             //right child prev to root;
         alphabet_arr[asciiVal]=root->right; //ascii value array element will point to character node
         encoded += "0" + decimalToBinary(asciiVal);
     }
     else if (root!=zero){ //start from the bottom
         //root->left=newCharacter(root->left, c);
+        AdaptiveHuffmanNode* temp = zero->parent; //temp pointer to zero parent
         zero->parent=new AdaptiveHuffmanNode(1);
         zero->parent->right=new AdaptiveHuffmanNode(1, c);
-        zero->parent->parent->left=zero->parent; //original parent now points to new parent
-        zero->parent->parent->next=zero->parent->parent->right;
-        zero->parent->parent->right->next=zero->parent;
+        temp->left=zero->parent; //original parent now points to new parent
+        temp->right->next=zero->parent;
         zero->parent->next=zero->parent->right;
-        zero->parent->right->next=zero;
+        alphabet_arr[asciiVal]->next=zero;
         incrementParent(zero->parent); //just increment parent if new character, no need to worry about leader
         encoded += pathZero + decimalToBinary(asciiVal); //REMEBER* add 
     }
+    return root;
 }
-char* AdaptiveHuffman::createAlphabetArray(string alphabet){
+void AdaptiveHuffman::createAlphabetArray(){
     char* c = new char[alphabet.length()+1];
     strcpy(c, alphabet.c_str());
     for (int i=0; i<alphabet.length(); i++){
         int asciiVal=(unsigned int)c[i]; //get ascii value from 1st character in alphabet (type cast character)
-        alphabetValid[asciiVal];
+        alphabetValid[asciiVal]=c[i];
     }
 }
 bool AdaptiveHuffman::validateAlphabet(int asciiVal){
+    createAlphabetArray();
     if (alphabetValid[asciiVal]==0) //if character not found in element, return false
         return false;
     return true; //else true
@@ -256,13 +261,16 @@ string AdaptiveHuffman::encode(string message){
     strcpy(msg, message.c_str()); //convert string into char array
     for (int i=0; i < message.length(); i++){
         int asciiVal=(unsigned int)msg[i];
-        while(validateAlphabet(asciiVal)){ //while character is in alphabet
+        if(validateAlphabet(asciiVal)){ //while character is in alphabet
             if (alphabet_arr[asciiVal]==zero){ //if alphabet char pointer points to zero, new character!!
-                newCharacter(root, msg[i]);
+                root=newCharacter(root, msg[i]);
             }
             else if (alphabet_arr[asciiVal]!=zero){
 
             }
+        }
+        else{
+            cout << "not in alphabet!" << endl;
         }
     }
 
