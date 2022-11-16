@@ -124,6 +124,9 @@ public:
     string reverseString(string);
     void incrementParent(AdaptiveHuffmanNode*);
     AdaptiveHuffmanNode* checkLeader(AdaptiveHuffmanNode*);
+    AdaptiveHuffmanNode* getLeader(AdaptiveHuffmanNode*);
+        //gets leader that is in front
+    void swapNodes(AdaptiveHuffmanNode*, AdaptiveHuffmanNode*);
 
 };
 
@@ -142,25 +145,48 @@ AdaptiveHuffman::AdaptiveHuffman(string alphabet){
     }
     this->message=this->encoded="";
 }
-AdaptiveHuffmanNode* AdaptiveHuffman::checkLeader(AdaptiveHuffmanNode* zero){
-    if (zero->count < zero->prev->count){ //2 cases
-        if(zero->parent == leader){
-
+void AdaptiveHuffman::swapNodes(AdaptiveHuffmanNode*n1, AdaptiveHuffmanNode*n2){
+    if (n1->parent->left==n1){//if node 1 is a left child
+        n1->parent->left=n2;
+    }
+    else if(n1->parent->right=n1){//if node 1 is a right child
+        n1->parent->right=n2;
+    }
+    if (n2->parent->left==n2){//if node 1 is a left child
+        n2->parent->left=n1;
+    }
+    else if(n1->parent->right=n1){//if node 1 is a right child
+        n2->parent->right=n1;
+    }   
+}
+AdaptiveHuffmanNode* AdaptiveHuffman::getLeader(AdaptiveHuffmanNode* leadNum){
+    while (leadNum->count==leadNum->prev->count){ //while node count is still the same
+        leadNum=leadNum->prev; //leadNum now points to next 
+    }
+}
+AdaptiveHuffmanNode* AdaptiveHuffman::checkLeader(AdaptiveHuffmanNode* node){
+    AdaptiveHuffmanNode* leader;
+    if (node->count > node->prev->count){ //2 cases (checking from bottom to root, instead of root to zero, so use >)
+        leader=getLeader(node);
+        if(node->parent == leader){ //if leader is parent just increment
+            node->parent->increment();
         }
-        else if (zero->parent != leader){
-            
+        else if (node->parent != leader){//if leader is not parent, swap nodes
+            swapNodes(node, leader);
         }
     }
-    return zero;
+    return node;
 }
 string reverseString(string s){
     reverse(s.begin(), s.end());
 }
-void AdaptiveHuffman::incrementParent(AdaptiveHuffmanNode* bottom){
-    while (bottom->parent!=nullptr){
-        bottom->parent->increment(); //increment on the way up
-        incrementParent(bottom->parent);
+void AdaptiveHuffman::incrementParent(AdaptiveHuffmanNode* node){
+    while (node->parent!=nullptr){ //increment all the way up to the root
+        node->parent->increment(); //increment parent
+        node=checkLeader(node->parent);
+        incrementParent(node->parent);
     }
+    root->increment(); //increment the root
 }
 AdaptiveHuffmanNode* AdaptiveHuffman::pathToZeroNode(AdaptiveHuffmanNode* zero){
     if (zero==root){
@@ -208,6 +234,7 @@ void AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* root, char c){
         zero->parent->parent->right->next=zero->parent;
         zero->parent->next=zero->parent->right;
         zero->parent->right->next=zero;
+        incrementParent(zero->parent); //just increment parent if new character, no need to worry about leader
         encoded += pathZero + decimalToBinary(asciiVal); //REMEBER* add 
     }
 }
