@@ -150,13 +150,13 @@ void AdaptiveHuffman::swapNodes(AdaptiveHuffmanNode*n1, AdaptiveHuffmanNode*n2){
     if (n1->parent->left==n1){//if node 1 is a left child
         n1->parent->left=n2;
     }
-    else if(n1->parent->right=n1){//if node 1 is a right child
+    else if(n1->parent->right==n1){//if node 1 is a right child
         n1->parent->right=n2;
     }
     if (n2->parent->left==n2){//if node 1 is a left child
         n2->parent->left=n1;
     }
-    else if(n1->parent->right=n1){//if node 1 is a right child
+    else if(n1->parent->right==n1){//if node 1 is a right child
         n2->parent->right=n1;
     }   
 }
@@ -168,7 +168,10 @@ AdaptiveHuffmanNode* AdaptiveHuffman::getLeader(AdaptiveHuffmanNode* leadNum){
 }
 AdaptiveHuffmanNode* AdaptiveHuffman::checkLeader(AdaptiveHuffmanNode* node){
     AdaptiveHuffmanNode* leader;
-    if (node->count > node->prev->count){ //2 cases (checking from bottom to root, instead of root to zero, so use >)
+    if (node->prev==nullptr){
+        return node;
+    }
+    else if (node->count > node->prev->count){ //2 cases (checking from bottom to root, instead of root to zero, so use >)
         leader=getLeader(node);
         if(node->parent == leader){ //if leader is parent just increment
             node->parent->increment();
@@ -183,12 +186,12 @@ string reverseString(string s){
     reverse(s.begin(), s.end());
 }
 void AdaptiveHuffman::incrementParent(AdaptiveHuffmanNode* node){
-    while (node->parent!=nullptr){ //increment all the way up to the root
+    if (node->parent!=nullptr){ //increment all the way up to the root
         node->parent->increment(); //increment parent
-        node=checkLeader(node->parent);
+        node=checkLeader(node);
         incrementParent(node->parent);
     }
-    root->increment(); //increment the root
+    return;
 }
 void AdaptiveHuffman::pathToZeroNode(AdaptiveHuffmanNode* zero){
     pathZero=""; //reset path to zero;
@@ -239,10 +242,11 @@ AdaptiveHuffmanNode* AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* parent, 
         temp->left->left=zero; //left child points to zero node
         temp->right->next=zero->parent;
         zero->parent->next=zero->parent->right;
+        zero->parent->prev=temp; //new parent node prev points to old parent
         alphabet_arr[asciiVal]->next=zero;
         alphabet_arr[asciiVal]=zero->parent->right; //alphabet_arr element pointer points to character
         parent=temp; //make parent point to top node
-        //incrementParent(zero->parent); //just increment parent if new character, no need to worry about leader
+        incrementParent(zero->parent); //just increment parent if new character, no need to worry about leader
         pathToZeroNode(zero);
         encoded += pathZero + decimalToBinary(asciiVal); //REMEBER* add 
     }
