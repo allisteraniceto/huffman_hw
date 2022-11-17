@@ -127,6 +127,7 @@ public:
     AdaptiveHuffmanNode* getLeader(AdaptiveHuffmanNode*);
         //gets leader that is in front
     void swapNodes(AdaptiveHuffmanNode*, AdaptiveHuffmanNode*);
+    AdaptiveHuffmanNode* characterAgain(AdaptiveHuffmanNode*, int);
 
 };
 
@@ -145,6 +146,11 @@ AdaptiveHuffman::AdaptiveHuffman(string alphabet){
         alphabet_arr[i]=zero;
     }
     this->message=this->encoded="";
+}
+AdaptiveHuffmanNode* AdaptiveHuffman::characterAgain(AdaptiveHuffmanNode* node, int asciiVal){
+    alphabet_arr[asciiVal]->increment();
+    node=checkLeader(node);
+    return node;
 }
 void AdaptiveHuffman::swapNodes(AdaptiveHuffmanNode*n1, AdaptiveHuffmanNode*n2){
     if (n1->parent->left==n1){//if node 1 is a left child
