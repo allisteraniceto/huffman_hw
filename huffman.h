@@ -153,10 +153,18 @@ void AdaptiveHuffman::characterAgain(int asciiVal){
     checkLeader(temp);
 }
 void AdaptiveHuffman::swapNodes(AdaptiveHuffmanNode*n1, AdaptiveHuffmanNode*n2){
-    if (n1->parent->left==n1){//if node 1 is a left child
-        n1->parent->left=n2;
+    AdaptiveHuffmanNode* temp1;
+    AdaptiveHuffmanNode* temp2;
+    if (n1->parent->left==n1 && n1->parent->right){ //case 1: left and right children
+        n1->parent->left=n2; //swap nodes
+        n2->parent->right=n1;
+        n2->parent->next=n1; //parent now points to n1
+        n1->next=n2; //n1 now points to left child
+        n1->prev=n2->parent; //n1 prev now points to parent
+        n2->next=n1->right; //n2 next now points to n1 right child
+        n2->prev=n1; //n2 prev now points to n1
     }
-    else if(n1->parent->right==n1){//if node 1 is a right child
+    else if(n1->parent->right==n1 && n2->parent->left==n2){//case 2: right and left child
         n1->parent->right=n2;
     }
     if (n2->parent->left==n2){//if node 1 is a left child
@@ -172,7 +180,7 @@ AdaptiveHuffmanNode* AdaptiveHuffman::getLeader(AdaptiveHuffmanNode* leadNum){
     }
     return leadNum;
 }
-AdaptiveHuffmanNode* AdaptiveHuffman::checkLeader(AdaptiveHuffmanNode* node){
+AdaptiveHuffmanNode* AdaptiveHuffman::checkLeader(AdaptiveHuffmanNode* node){ //from zero up to root
     AdaptiveHuffmanNode* leader;
     if (node->prev==nullptr){
         return node;
@@ -254,6 +262,7 @@ AdaptiveHuffmanNode* AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* parent, 
         alphabet_arr[asciiVal]=zero->parent->right; //alphabet_arr element pointer points to character
         zero->prev=alphabet_arr[asciiVal]; //zero prev points to 0 parent child
         //parent=temp; //make parent point to top node
+        
         incrementParent(zero->parent); //just increment parent if new character, no need to worry about leader
         pathToZeroNode(zero);
         encoded += pathZero + decimalToBinary(asciiVal); //REMEBER* add 
