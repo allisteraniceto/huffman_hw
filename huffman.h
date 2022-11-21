@@ -166,6 +166,13 @@ void AdaptiveHuffman::swapNodes(AdaptiveHuffmanNode*n1, AdaptiveHuffmanNode*n2){
     }
     else if(n1->parent->right==n1 && n2->parent->left==n2){//case 2: right and left child
         n1->parent->right=n2;
+        n2->parent->left=n1;
+        n1->parent->next=n2;
+        n2->prev=n2->parent;
+        n2->next=n1;
+        n1->prev=n2;
+        n1->next=n2->right;
+        n2->right->prev=n1;
     }
     if (n2->parent->left==n2){//if node 1 is a left child
         n2->parent->left=n1;
