@@ -127,7 +127,7 @@ public:
     AdaptiveHuffmanNode* getLeader(AdaptiveHuffmanNode*);
         //gets leader that is in front
     void swapNodes(AdaptiveHuffmanNode*, AdaptiveHuffmanNode*);
-    AdaptiveHuffmanNode* characterAgain(AdaptiveHuffmanNode*, int);
+    void characterAgain(int);
 
 };
 
@@ -147,10 +147,10 @@ AdaptiveHuffman::AdaptiveHuffman(string alphabet){
     }
     this->message=this->encoded="";
 }
-AdaptiveHuffmanNode* AdaptiveHuffman::characterAgain(AdaptiveHuffmanNode* node, int asciiVal){
-    alphabet_arr[asciiVal]->increment();
-    node=checkLeader(node);
-    return node;
+void AdaptiveHuffman::characterAgain(int asciiVal){
+    AdaptiveHuffmanNode* temp=alphabet_arr[asciiVal];
+    temp->increment();
+    checkLeader(temp);
 }
 void AdaptiveHuffman::swapNodes(AdaptiveHuffmanNode*n1, AdaptiveHuffmanNode*n2){
     if (n1->parent->left==n1){//if node 1 is a left child
@@ -190,6 +190,7 @@ AdaptiveHuffmanNode* AdaptiveHuffman::checkLeader(AdaptiveHuffmanNode* node){
 }
 string reverseString(string s){
     reverse(s.begin(), s.end());
+    return s;
 }
 void AdaptiveHuffman::incrementParent(AdaptiveHuffmanNode* node){
     if (node->parent!=nullptr){ //increment all the way up to the root
@@ -248,10 +249,11 @@ AdaptiveHuffmanNode* AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* parent, 
         temp->left->left=zero; //left child points to zero node
         temp->right->next=zero->parent;
         zero->parent->next=zero->parent->right;
-        zero->parent->prev=temp; //new parent node prev points to old parent
+        zero->parent->prev=temp->right; //new parent node prev points to right child
         alphabet_arr[asciiVal]->next=zero;
         alphabet_arr[asciiVal]=zero->parent->right; //alphabet_arr element pointer points to character
-        parent=temp; //make parent point to top node
+        zero->prev=alphabet_arr[asciiVal]; //zero prev points to 0 parent child
+        //parent=temp; //make parent point to top node
         incrementParent(zero->parent); //just increment parent if new character, no need to worry about leader
         pathToZeroNode(zero);
         encoded += pathZero + decimalToBinary(asciiVal); //REMEBER* add 
@@ -282,7 +284,7 @@ string AdaptiveHuffman::encode(string message){
                 root=newCharacter(root, msg[i]);
             }
             else if (alphabet_arr[asciiVal]!=zero){//if character is encoutner again
-
+                characterAgain(asciiVal);
             }
         }
         else{

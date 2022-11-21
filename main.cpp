@@ -4,10 +4,13 @@
 #include "huffman.h"
 using namespace std;
 
-//TASKS:
-//-fix path to zero, missing one path
-//-start characters encounters agan
-//-implement and debug checkLeader and validate
+/*
+TASKS:
+x -fix path to zero, missing one path
+-implement and debug checkLeader and validate
+-add cases to swap node
+-create and implement characterAgain
+*/
 
 //remember*: to output path to character, start from the character node all the way up
 
