@@ -55,6 +55,7 @@ private:
     char alphabetValid[NUM_OF_CHARACTERS];
     string message; 
     string encoded;
+    string decoded;
     string pathZero;
 
 public:
@@ -150,7 +151,7 @@ AdaptiveHuffman::AdaptiveHuffman(string alphabet){
 void AdaptiveHuffman::characterAgain(int asciiVal){
     AdaptiveHuffmanNode* temp=alphabet_arr[asciiVal];
     temp->increment();
-    checkLeader(temp);
+    incrementParent(temp);
 }
 void AdaptiveHuffman::swapNodes(AdaptiveHuffmanNode*n1, AdaptiveHuffmanNode*n2){
     AdaptiveHuffmanNode* temp;
@@ -270,6 +271,7 @@ AdaptiveHuffmanNode* AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* parent, 
         zero->parent->prev=temp->right; //new parent node prev points to right child
         alphabet_arr[asciiVal]->next=zero;
         alphabet_arr[asciiVal]=zero->parent->right; //alphabet_arr element pointer points to character
+        alphabet_arr[asciiVal]->prev=zero->parent;
         zero->prev=alphabet_arr[asciiVal]; //zero prev points to 0 parent child
         //parent=temp; //make parent point to top node
         zero->parent->parent->increment(); 
@@ -294,7 +296,7 @@ bool AdaptiveHuffman::validateAlphabet(int asciiVal){
     return true; //else true
 }
 string AdaptiveHuffman::encode(string message){
-    char* msg = new char[message.length()+1]; //+1 for null terminated character
+    char* msg = new char[message.length()];
     strcpy(msg, message.c_str()); //convert string into char array
     for (int i=0; i < message.length(); i++){
         int asciiVal=(unsigned int)msg[i];
@@ -310,10 +312,15 @@ string AdaptiveHuffman::encode(string message){
             cout << "not in alphabet!" << endl;
         }
     }
-
+    return this->encoded;
 }
 string AdaptiveHuffman::decode(string encoded){
-
+    char* enc = new char[message.length()];
+    strcpy(enc, encoded.c_str()); //convert string to char array
+    for (int i=0; i<encoded.length(); i++){
+        
+    }
+    return this->decoded;
 }
 
 //can use .length to get amount of char in string

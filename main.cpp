@@ -128,10 +128,16 @@ int main(int argc, char const *argv[]){
     //  call decode method
 
 
-
+    string encoded;
+    string decoded;
 
     AdaptiveHuffman e("abc");
-    e.encode("abcccabb");
+    AdaptiveHuffman d("abc");
+    encoded=e.encode("abcccabb");
+    
+    //decoded=d.decode(encoded);
+
+    //cout << decoded << endl;
 
 
     
