@@ -129,6 +129,8 @@ public:
         //gets leader that is in front
     void swapNodes(AdaptiveHuffmanNode*, AdaptiveHuffmanNode*);
     void characterAgain(int);
+    string getCharacter(int);
+    int binaryToInt(string);
 
 };
 
@@ -315,10 +317,24 @@ string AdaptiveHuffman::encode(string message){
     return this->encoded;
 }
 string AdaptiveHuffman::decode(string encoded){
+    AdaptiveHuffmanNode* temp = root;
+    char c;
     char* enc = new char[message.length()];
     strcpy(enc, encoded.c_str()); //convert string to char array
     for (int i=0; i<encoded.length(); i++){
-        
+        if (temp==zero){
+            c=getCharacter(i);
+            root=newCharacter(root, )
+        }
+        else{
+            if (enc[i]=='0'){
+                temp=temp->left;
+            }
+            else if (enc[i]=='1'){
+                temp=temp->right;
+            }
+        }
+
     }
     return this->decoded;
 }
