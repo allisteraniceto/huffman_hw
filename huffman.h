@@ -130,7 +130,7 @@ public:
     void swapNodes(AdaptiveHuffmanNode*, AdaptiveHuffmanNode*);
     void characterAgain(int);
     char getCharacter(int);
-    int binaryToInt(string);
+    //int binaryToInt(string); //can use stoi() - string to int function
 
 };
 
@@ -316,27 +316,32 @@ string AdaptiveHuffman::encode(string message){
     }
     return this->encoded;
 }
-char getCharacter(int asciiVal){
 
+char getCharacter(int asciiVal){
+    return ('a');
 }
 string AdaptiveHuffman::decode(string encoded){
     AdaptiveHuffmanNode* temp = root;
     int asciiVal=0;
     string binary;
+    char c;
     char* enc = new char[message.length()];
     strcpy(enc, encoded.c_str()); //convert string to char array
     for (int i=0; i<encoded.length(); i++){
-        
         if (temp==zero){ //if temp hits zero node
             for (int j=i; j<(i+8); j++){
                 binary+=enc[j];
             }
-            asciiVal=binaryToInt(binary);
+            asciiVal=stoi(binary, 0, 2);
+            c=asciiVal; //convert ascii to char using assignment operator
             root=newCharacter(root, c);
-            i+=8; //skip next 8 bits
+            i+=7; //skip next 8 bits (just 7 because i++ adds 1 already)
+            temp=root; //go back to root
         }
-        else if (temp->character != ""){ //if temp hits a character node
-
+        else if (temp->character != 0){ //if temp hits a character node
+            asciiVal=temp->character;
+            characterAgain(asciiVal);
+            temp=root; //go back to root
         }
         else{
             if (enc[i]=='0'){
@@ -347,7 +352,8 @@ string AdaptiveHuffman::decode(string encoded){
             }
         }
     }
-    return this->decoded;
+    decoded=encoded; //newCharacter and Character uses encoded, but decoded is a new object just make decoded equal to encoded and return
+    return decoded;
 }
 
 //can use .length to get amount of char in string

@@ -135,14 +135,17 @@ int main(int argc, char const *argv[]){
     AdaptiveHuffman d("abc");
     encoded=e.encode("abcccabb");
     
-    //decoded=d.decode(encoded);
+    decoded=d.decode(encoded);
 
-    //cout << decoded << endl;
+    cout << decoded << endl;
 
 
-    
+    string binary="00000011";
     char a='a';
+    char b=98;
     cout << (unsigned int)a << endl;
+    cout << b << endl;
+    cout << stoi(binary,0, 2) << endl;
     return 0;
 }
 
