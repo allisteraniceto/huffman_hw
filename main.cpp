@@ -135,9 +135,9 @@ int main(int argc, char const *argv[]){
     AdaptiveHuffman d("abc");
     encoded=e.encode("abcccabb");
     
-    decoded=d.decode(encoded);
+    //decoded=d.decode("001100001000110001010001100011");
 
-    cout << decoded << endl;
+    //cout << decoded << endl;
 
 
     string binary="00000011";

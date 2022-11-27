@@ -16,6 +16,7 @@ using namespace std;
 
 const int NUM_OF_CHARACTERS=256; //number of ascii characters
 const int NUM_OF_ARGUMENTS=4; //# of arguments
+const int CHARACTER_SIZE=8; //size of character in 8 bit notation
 
 class AdaptiveHuffmanNode{
 public:
@@ -57,6 +58,7 @@ private:
     string encoded;
     string decoded;
     string pathZero;
+    string pathChar;
 
 public:
     AdaptiveHuffman();
@@ -130,6 +132,7 @@ public:
     void swapNodes(AdaptiveHuffmanNode*, AdaptiveHuffmanNode*);
     void characterAgain(int);
     char getCharacter(int);
+    void pathToCharacterAgain(AdaptiveHuffmanNode*);
     //int binaryToInt(string); //can use stoi() - string to int function
 
 };
@@ -154,6 +157,8 @@ void AdaptiveHuffman::characterAgain(int asciiVal){
     AdaptiveHuffmanNode* temp=alphabet_arr[asciiVal];
     temp->increment();
     incrementParent(temp);
+    pathToCharacterAgain(alphabet_arr[asciiVal]);
+    encoded+=pathChar;
 }
 void AdaptiveHuffman::swapNodes(AdaptiveHuffmanNode*n1, AdaptiveHuffmanNode*n2){
     AdaptiveHuffmanNode* temp;
@@ -232,6 +237,18 @@ void AdaptiveHuffman::pathToZeroNode(AdaptiveHuffmanNode* zero){
         pathZero+="1";
     }
 }
+void AdaptiveHuffman::pathToCharacterAgain(AdaptiveHuffmanNode* charNode){
+    pathChar=""; //resets path to character
+    AdaptiveHuffmanNode* temp = charNode;
+    if (temp==temp->parent->left){ //if left child
+        pathToCharacterAgain(temp->parent);
+        pathChar+="0";
+    }
+    else if (temp==temp->parent->right){
+        pathToCharacterAgain(temp->parent);
+        pathChar+="1";
+    }
+}
 string AdaptiveHuffman::decimalToBinary(int ascii){ //from: Program for decimal to binary conversion. GeeksforGeeks. (2022, July 17). Retrieved November 13, 2022, from https://www.geeksforgeeks.org/program-decimal-binary-conversion/ 
     string binary= "";
     for (int i=7; i>=0; i--){ //8 bit representation
@@ -257,10 +274,11 @@ AdaptiveHuffmanNode* AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* parent, 
         parent->right->prev=parent;             //right child prev to parent;
         alphabet_arr[asciiVal]=parent->right; //ascii value array element will point to character node
         alphabet_arr[asciiVal]->parent=parent;
-        encoded += "0" + decimalToBinary(asciiVal);
+        encoded += decimalToBinary(asciiVal);
     }
     else if (parent!=zero){ //start from the bottom
         //parent->left=newCharacter(parent->left, c);
+        pathToZeroNode(zero); //get path to zero node first
         temp = zero->parent; //temp pointer to zero parent
         zero->parent=new AdaptiveHuffmanNode(1);
         zero->parent->right=new AdaptiveHuffmanNode(1, c);
@@ -278,7 +296,6 @@ AdaptiveHuffmanNode* AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* parent, 
         //parent=temp; //make parent point to top node
         zero->parent->parent->increment(); 
         incrementParent(zero->parent->parent); //just increment parent if new character, no need to worry about leader
-        pathToZeroNode(zero);
         encoded += pathZero + decimalToBinary(asciiVal); //REMEBER* add 
     }
     return parent;
@@ -329,13 +346,13 @@ string AdaptiveHuffman::decode(string encoded){
     strcpy(enc, encoded.c_str()); //convert string to char array
     for (int i=0; i<encoded.length(); i++){
         if (temp==zero){ //if temp hits zero node
-            for (int j=i; j<(i+8); j++){
+            for (int j=i+1; j<(i+1+CHARACTER_SIZE); j++){ //i+1 because character starts after path to zero
                 binary+=enc[j];
             }
             asciiVal=stoi(binary, 0, 2);
             c=asciiVal; //convert ascii to char using assignment operator
             root=newCharacter(root, c);
-            i+=7; //skip next 8 bits (just 7 because i++ adds 1 already)
+            i+=8; //skip next 8 bits
             temp=root; //go back to root
         }
         else if (temp->character != 0){ //if temp hits a character node
