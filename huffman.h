@@ -161,28 +161,37 @@ void AdaptiveHuffman::characterAgain(int asciiVal){
     encoded+=pathChar;
 }
 void AdaptiveHuffman::swapNodes(AdaptiveHuffmanNode*n1, AdaptiveHuffmanNode*n2){
-    AdaptiveHuffmanNode* temp, temp2, n1Prev, n1Next, n1Parent, n2Prev, n2Next, n2Parent;
+    AdaptiveHuffmanNode* temp;
+    AdaptiveHuffmanNode* temp2;
+    AdaptiveHuffmanNode* n1Prev;
+    AdaptiveHuffmanNode* n1Next;
+    AdaptiveHuffmanNode* n1Parent;
+    AdaptiveHuffmanNode* n2Prev;
+    AdaptiveHuffmanNode* n2Next;
+    AdaptiveHuffmanNode* n2Parent;
+
     temp=n1->parent; //points to parents of n1 and n2 nodes
     temp2=n2->parent;
 
     n1Prev=n1->prev;
     n1Next=n1->next;
     n1Parent=n1->parent;
+
     n2Prev=n2->prev;
     n2Next=n2->next;
     n2Parent=n2->parent;    
     
-    if (n1->parent->left==n1 && n2->parent->right==n2){ //case 1: left and right children
+    if (n1->parent->left==n1 && n2->parent->right==n2 && n1->parent==n2->parent){ //case 1: left and right children
         temp->left=n2; //swap nodes
         temp->right=n1;
 
-        n2->parent->next=n1; //parent now points to n1
+        temp->next=n1; //parent now points to n1
         n1->next=n2; //n1 now points to left child
-        n1->prev=n2->parent; //n1 prev now points to parent
+        n1->prev=temp; //n1 prev now points to parent
         n2->next=n1->right; //n2 next now points to n1 right child
         n2->prev=n1; //n2 prev now points to n1
     }
-    else if(n1->parent->right==n1 && n2->parent->left==n2){//case 2: right and left children
+    else if(n1->parent->right==n1 && n2->parent->left==n2 && n1->parent==n2->parent){//case 2: right and left children
         n1->parent->right=n2;
         n2->parent->left=n1;
         
@@ -199,21 +208,68 @@ void AdaptiveHuffman::swapNodes(AdaptiveHuffmanNode*n1, AdaptiveHuffmanNode*n2){
         n2->next=n1Next;
         n2->parent=n1Parent;
 
+        n1Prev->next=n2;
+        n1Next->prev=n2;
+
         temp2->right=n1;
-        temp2->parent->next=n1;
+        temp2->next=n1;
         n1->prev=n2Prev;
         n1->next=n2Next;
         n1->parent=n2Parent;
     }
     else if (n1->parent->right==n1 && n2->parent->left==n2 && n1->parent!=n1->parent){//case 4: n1 right child, n2 left child swap
+        temp->right=n2; //n2 pointers changing
+        temp->next=n2;
+        n2->prev=n1Prev;
+        n2->next=n1Next;
+        n2->parent=n1Parent;
 
+        n1Prev->next=n2;
+        n1Next->prev=n2;
+
+        temp2->left=n1; //n1 pointers changing
+        n1->prev=n2Prev;
+        n1->next=n2Next;
+        n1->parent=n2Parent;
+
+        n2Prev->next=n1;
+        n2Next->prev=n1;
     }
-    //if (n2->parent->left==n2){//if node 1 is a left child
-    //    n2->parent->left=n1;
-    //}
-    //else if(n1->parent->right==n1){//if node 1 is a right child
-    //    n2->parent->right=n1;
-    //}   
+    else if(n1->parent->left==n1 && n2->parent->left==n2){ //case: left left
+        temp->left=n2;
+        n2->prev=n1Prev;
+        n2->next=n1Next;
+        n2->parent=n1Parent;
+
+        n1Prev->next=n2;
+        n1Next->prev=n2;
+
+        temp2->left=n1;
+        n1->prev=n2Prev;
+        n1->next=n2Next;
+        n1->parent=n2Parent;
+
+        n2Prev->next=n1;
+        n2Next->prev=n1;        
+    }
+    else if(n1->parent->right==n1 && n2->parent->right==n2){ //case: right right
+        temp->right=n2;
+        temp->next=n2;
+        n2->prev=n1Prev;
+        n2->next=n1Next;
+        n2->parent=n1Parent;
+
+        n1Prev->next=n2;
+        n1Next->prev=n2;
+
+        temp2->right=n1;
+        n1->prev=n2Prev;
+        n1->next=n2Next;
+        n1->parent=n2Parent;
+
+        n2Prev->next=n1;
+        n2Next->prev=n1;
+    }
 }
 AdaptiveHuffmanNode* AdaptiveHuffman::getLeader(AdaptiveHuffmanNode* leadNum){
     while (leadNum->count==leadNum->prev->count){ //while node count is still the same
