@@ -188,19 +188,20 @@ void AdaptiveHuffman::swapNodes(AdaptiveHuffmanNode*n1, AdaptiveHuffmanNode*n2){
         temp->next=n1; //parent now points to n1
         n1->next=n2; //n1 now points to left child
         n1->prev=temp; //n1 prev now points to parent
-        n2->next=n1->right; //n2 next now points to n1 right child
+        n2->next=n1Next; //n2 next now points to n1 right child
         n2->prev=n1; //n2 prev now points to n1
+        n1Next->prev=n2; //former n1 next now points to n2
     }
     else if(n1->parent->right==n1 && n2->parent->left==n2 && n1->parent==n2->parent){//case 2: right and left children
-        n1->parent->right=n2;
-        n2->parent->left=n1;
+        temp->right=n2;
+        temp->left=n1;
         
-        n1->parent->next=n2;
-        n2->prev=n2->parent;
+        temp->next=n2;
+        n2->prev=temp;
         n2->next=n1;
         n1->prev=n2;
-        n1->next=n2->right;
-        n2->right->prev=n1;
+        n1->next=n2Next;
+        n2Next->prev=n1;
     }
     else if (n1->parent->left==n1 && n2->parent->right==n2 && n1->parent!=n2->parent){//case 3: n1 left child, n2 right child swap
         temp->left=n2;
@@ -359,6 +360,7 @@ AdaptiveHuffmanNode* AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* parent, 
         parent->right->prev=parent;             //right child prev to parent;
         alphabet_arr[asciiVal]=parent->right; //ascii value array element will point to character node
         alphabet_arr[asciiVal]->parent=parent;
+        alphabet_arr[asciiVal]->next=zero;
         encoded += decimalToBinary(asciiVal);
     }
     else if (parent!=zero){ //start from the bottom
@@ -374,9 +376,9 @@ AdaptiveHuffmanNode* AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* parent, 
         temp->right->next=zero->parent;
         zero->parent->next=zero->parent->right;
         zero->parent->prev=temp->right; //new parent node prev points to right child
-        alphabet_arr[asciiVal]->next=zero;
         alphabet_arr[asciiVal]=zero->parent->right; //alphabet_arr element pointer points to character
         alphabet_arr[asciiVal]->prev=zero->parent;
+        alphabet_arr[asciiVal]->next=zero;
         zero->prev=alphabet_arr[asciiVal]; //zero prev points to 0 parent child
         //parent=temp; //make parent point to top node
         zero->parent->parent->increment(); 
