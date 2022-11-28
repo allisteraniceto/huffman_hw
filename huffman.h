@@ -427,24 +427,27 @@ char getCharacter(int asciiVal){
 string AdaptiveHuffman::decode(string encoded){
     AdaptiveHuffmanNode* temp = root;
     int asciiVal=0;
-    string binary;
     char c;
-    char* enc = new char[message.length()];
+    char* enc = new char[encoded.length()];
     strcpy(enc, encoded.c_str()); //convert string to char array
     for (int i=0; i<encoded.length(); i++){
+        string binary="";
         if (temp==zero){ //if temp hits zero node
-            for (int j=i+1; j<(i+1+CHARACTER_SIZE); j++){ //i+1 because character starts after path to zero
+            for (int j=i; j<(i+CHARACTER_SIZE); j++){ //get next 8 bits
                 binary+=enc[j];
             }
             asciiVal=stoi(binary, 0, 2);
             c=asciiVal; //convert ascii to char using assignment operator
             root=newCharacter(root, c);
-            i+=8; //skip next 8 bits
+            decoded+=c; //add character to decoded
+            i+=7; //skip next 8 bits
             temp=root; //go back to root
         }
         else if (temp->character != 0){ //if temp hits a character node
             asciiVal=temp->character;
             characterAgain(asciiVal);
+            c=asciiVal;
+            decoded+=c;
             temp=root; //go back to root
         }
         else{
@@ -456,7 +459,6 @@ string AdaptiveHuffman::decode(string encoded){
             }
         }
     }
-    decoded=encoded; //newCharacter and Character uses encoded, but decoded is a new object just make decoded equal to encoded and return
     return decoded;
 }
 
