@@ -217,7 +217,7 @@ void AdaptiveHuffman::swapNodes(AdaptiveHuffmanNode*n1, AdaptiveHuffmanNode*n2){
         n1->next=n2Next;
         n1->parent=n2Parent;
     }
-    else if (n1->parent->right==n1 && n2->parent->left==n2 && n1->parent!=n1->parent){//case 4: n1 right child, n2 left child swap
+    else if (n1->parent->right==n1 && n2->parent->left==n2 && n1->parent!=n2->parent){//case 4: n1 right child, n2 left child swap
         temp->right=n2; //n2 pointers changing
         temp->next=n2;
         n2->prev=n1Prev;
