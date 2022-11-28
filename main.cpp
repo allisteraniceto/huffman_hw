@@ -126,12 +126,12 @@ int main(int argc, char const *argv[]){
     //  call decode method
 
 
-    string encoded;
-    string decoded;
+    // string encoded;
+    // string decoded;
 
-    AdaptiveHuffman e("abc");
-    AdaptiveHuffman d("abc");
-    encoded=e.encode("abcccabb");
+    // AdaptiveHuffman e("abc");
+    // AdaptiveHuffman d("abc");
+    // encoded=e.encode("abcccabb");
     
     //decoded=d.decode("001100001000110001010001100011");
 
