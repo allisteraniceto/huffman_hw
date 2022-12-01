@@ -64,8 +64,8 @@ int main(int argc, char const *argv[]){
         textFile.open(messageArg, ios::in); //open file
         if (textFile.is_open()){ 
             while (getline(textFile, message)){
-                message+=message; //append each line to the message string
-            }
+                //message+=message; //append each line to the message string
+            } 
         }
         else{
             cout << "FILE NOT OPEN!! message" << endl;
@@ -75,11 +75,11 @@ int main(int argc, char const *argv[]){
         encoded=e.encode(message);
 
         //OUTPUT ENCODED FILE
-        textFile.open(messageArg, ios::out); //open outgoing file
-        if (textFile.is_open()){
-            textFile << encoded;
-        }
-        textFile.close();
+        //textFile.open(messageArg, ios::out); //open outgoing file
+        //if (textFile.is_open()){
+        //    textFile << encoded;
+        //}
+        //textFile.close();
     }
     else if (argv[1]=="decode"){//else if decode command
         //OPEN ALPHABET FILE AND PUT INTO STRING
@@ -102,11 +102,11 @@ int main(int argc, char const *argv[]){
         decoded=d.decode(message);
 
         //OUTPUT DECODED FILE
-        textFile.open(argv[3], ios::out); //open outgoing file
-        if (textFile.is_open()){
-            textFile << decoded;
-        }
-        textFile.close();
+        //textFile.open(argv[3], ios::out); //open outgoing file
+        //if (textFile.is_open()){
+        //    textFile << decoded;
+        //}
+        //textFile.close();
     }
     else{
         cout << "Wrong command given, enter encode OR decode as 2nd arguemnt!!" << endl;

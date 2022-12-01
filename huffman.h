@@ -131,7 +131,6 @@ public:
         //gets leader that is in front
     void swapNodes(AdaptiveHuffmanNode*, AdaptiveHuffmanNode*);
     void characterAgain(int);
-    char getCharacter(int);
     void pathToCharacterAgain(AdaptiveHuffmanNode*);
     //int binaryToInt(string); //can use stoi() - string to int function
 
@@ -140,8 +139,8 @@ public:
 //TREE METHODS:
 AdaptiveHuffman::AdaptiveHuffman(){
     this->root=this->zero=nullptr;
-    this->alphabet_arr[NUM_OF_CHARACTERS];
-    this->alphabetValid[NUM_OF_CHARACTERS];
+    this->alphabet_arr[NUM_OF_CHARACTERS-1];
+    this->alphabetValid[NUM_OF_CHARACTERS-1];
     this->message=this->encoded="";
 }
 AdaptiveHuffman::AdaptiveHuffman(string alphabet){
@@ -273,14 +272,14 @@ void AdaptiveHuffman::swapNodes(AdaptiveHuffmanNode*n1, AdaptiveHuffmanNode*n2){
     }
 }
 AdaptiveHuffmanNode* AdaptiveHuffman::getLeader(AdaptiveHuffmanNode* leadNum){
-    while (leadNum->count==leadNum->prev->count){ //while node count is still the same
+    while (leadNum->prev != nullptr && leadNum->count == leadNum->prev->count) { //while node count is still the same
         leadNum=leadNum->prev; //leadNum now points to next 
     }
     return leadNum;
 }
 AdaptiveHuffmanNode* AdaptiveHuffman::checkLeader(AdaptiveHuffmanNode* node){ //from zero up to root
     AdaptiveHuffmanNode* leader;
-    if (node->prev==nullptr){
+    if (node->prev==nullptr){ //root node
         return node;
     }
     else if (node->count > node->prev->count){ //2 cases (checking from bottom to root, instead of root to zero, so use >)
@@ -292,6 +291,9 @@ AdaptiveHuffmanNode* AdaptiveHuffman::checkLeader(AdaptiveHuffmanNode* node){ //
             swapNodes(node, leader);
             node->parent->increment();
         }
+    }
+    else {
+        node->parent->increment();
     }
     return node;
 }
@@ -389,7 +391,7 @@ AdaptiveHuffmanNode* AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* parent, 
 }
 void AdaptiveHuffman::createAlphabetArray(){
     char* c = new char[alphabet.length()+1];
-    strcpy(c, alphabet.c_str());
+    strcpy_s(c,alphabet.length()+1, alphabet.c_str());
     for (int i=0; i<alphabet.length(); i++){
         int asciiVal=(unsigned int)c[i]; //get ascii value from 1st character in alphabet (type cast character)
         alphabetValid[asciiVal]=c[i];
@@ -403,7 +405,7 @@ bool AdaptiveHuffman::validateAlphabet(int asciiVal){
 }
 string AdaptiveHuffman::encode(string message){
     char* msg = new char[message.length()];
-    strcpy(msg, message.c_str()); //convert string into char array
+    strcpy_s(msg, message.length()+1, message.c_str()); //convert string into char array
     for (int i=0; i < message.length(); i++){
         int asciiVal=(unsigned int)msg[i];
         if(validateAlphabet(asciiVal)){ //while character is in alphabet
@@ -421,15 +423,12 @@ string AdaptiveHuffman::encode(string message){
     return this->encoded;
 }
 
-char getCharacter(int asciiVal){
-    return ('a');
-}
 string AdaptiveHuffman::decode(string encoded){
     AdaptiveHuffmanNode* temp = root;
     int asciiVal=0;
     char c;
     char* enc = new char[encoded.length()];
-    strcpy(enc, encoded.c_str()); //convert string to char array
+    strcpy_s(enc, encoded.length()+1, encoded.c_str()); //convert string to char array
     for (int i=0; i<encoded.length(); i++){
         string binary="";
         if (temp==zero){ //if temp hits zero node
