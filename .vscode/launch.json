@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
     {
-        "name": "GDB Launch (Windows)",
+        "name": "GDB Launch Clang++",
         "type": "cppdbg",
         "request": "launch",
         "program": "enter program name, for example ${workspaceFolder}/debugging.out",
