@@ -10,7 +10,10 @@
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
+                "${fileDirname}/${fileBasenameNoExtension}",
+                "encode",
+                "alpha.txt",
+                "message.txt"
             ],
             "options": {
                 "cwd": "${fileDirname}"
