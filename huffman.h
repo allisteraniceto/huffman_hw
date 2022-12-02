@@ -393,8 +393,8 @@ AdaptiveHuffmanNode* AdaptiveHuffman::newCharacter(AdaptiveHuffmanNode* parent, 
 }
 void AdaptiveHuffman::createAlphabetArray(){
     char* c = new char[alphabet.length()+1];
-    strcpy_s(c,alphabet.length()+1, alphabet.c_str());
-    //strcpy(c, alphabet.c_str());
+    //strcpy_s(c,alphabet.length()+1, alphabet.c_str());
+    strcpy(c, alphabet.c_str());
     for (int i=0; i<alphabet.length(); i++){
         int asciiVal=(unsigned int)c[i]; //get ascii value from 1st character in alphabet (type cast character)
         alphabetValid[asciiVal]=c[i];
@@ -408,8 +408,8 @@ bool AdaptiveHuffman::validateAlphabet(int asciiVal){
 }
 string AdaptiveHuffman::encode(string message){
     char* msg = new char[message.length()];
-    strcpy_s(msg, message.length()+1, message.c_str()); //convert string into char array
-    //strcpy(msg, message.c_str());
+    //strcpy_s(msg, message.length()+1, message.c_str()); //convert string into char array
+    strcpy(msg, message.c_str());
     for (int i=0; i < message.length(); i++){
         int asciiVal=(unsigned int)msg[i];
         if(validateAlphabet(asciiVal)){ //while character is in alphabet
@@ -432,8 +432,8 @@ string AdaptiveHuffman::decode(string encoded){
     int asciiVal=0;
     char c;
     char* enc = new char[encoded.length()];
-    strcpy_s(enc, encoded.length()+1, encoded.c_str()); //convert string to char array
-    //strcpy(enc, encoded.c_str());
+    //strcpy_s(enc, encoded.length()+1, encoded.c_str()); //convert string to char array
+    strcpy(enc, encoded.c_str());
     for (int i=0; i<encoded.length(); i++){
         string binary="";
         if (temp==zero){ //if temp hits zero node

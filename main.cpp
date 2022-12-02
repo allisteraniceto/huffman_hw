@@ -144,11 +144,11 @@ int main(int argc, char const *argv[]){
     //  call decode method
 
 
-    //AdaptiveHuffman e("abcde");
-    //AdaptiveHuffman d("abcde");
-    //encoded=e.encode("aabbbabcde");
-    //
-    //decoded=d.decode(encoded);
+    // AdaptiveHuffman e("abcde");
+    // AdaptiveHuffman d("abcde");
+    // encoded=e.encode("aabbbabcde");
+    
+    // decoded=d.decode(encoded);
 
     cout << encoded << endl;
     cout << decoded << endl;
