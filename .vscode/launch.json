@@ -9,7 +9,7 @@
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/${fileBasenameNoExtension}",
-        "args": ["encode", "alpha.txt", "message.txt"],
+        "args": ["decode", "alpha.txt", "message.txt.encoded"],
         "stopAtEntry": true,
         "cwd": "${fileDirname}",
         "environment": [],

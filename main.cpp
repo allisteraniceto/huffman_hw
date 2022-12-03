@@ -89,7 +89,7 @@ int main(int argc, char const *argv[]){
         }
         textFile.close();
     }
-    else if (argv[1]=="decode"){//else if decode command
+    else if (commandArg == "decode"){//else if decode command
         //OPEN ALPHABET FILE AND PUT INTO STRING
         alphabetFile.open(alphabetArg, ios::in);
         if (alphabetFile.is_open()){
@@ -111,8 +111,8 @@ int main(int argc, char const *argv[]){
         cout << decoded << endl;
 
         //OUTPUT decoded.txt FILE
-        int argLength = encodedArg.length();
-        encodedArg.erase(argLength, argLength-8); //detach .encoded from end of arg to (end - 8)
+        int extensionLen = 8;
+        encodedArg.erase(encodedArg.end()-extensionLen, encodedArg.end()); //detach .encoded from end -8 of arg to end
         encodedArg+=".decoded"; //append .decoded to encoded.txt file
         textFile.open(encodedArg, ios::out); //open outgoing file
         if (textFile.is_open()){
