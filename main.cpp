@@ -33,6 +33,7 @@ int main(int argc, char const *argv[]){
     string commandArg; //command argument
     string alphabetArg; //alphabet argument
     string messageArg; //message argument
+    string encodedArg; //encoded argument
 
     if (argc != VALID_NUM_OF_ARGUMENTS){
         cout << "Invalid number of arguments" << endl;
@@ -45,7 +46,12 @@ int main(int argc, char const *argv[]){
     
     commandArg=argv[1];
     alphabetArg=argv[2];
-    messageArg=argv[3];
+    if (commandArg=="encode"){ //if encode, set messageArg = argv[3]
+        messageArg=argv[3];
+    }
+    else if (commandArg=="decode"){ //if decode, set encodedArg = argv[3]
+        encodedArg=argv[3];
+    }
 
     cout << "alphabet: " <<  alphabetArg << endl;
 
@@ -73,40 +79,46 @@ int main(int argc, char const *argv[]){
         textFile.close();
         AdaptiveHuffman e(alphabet);
         encoded=e.encode(message);
+        cout << encoded << endl;
 
-        //OUTPUT ENCODED FILE
-        //textFile.open(messageArg, ios::out); //open outgoing file
-        //if (textFile.is_open()){
-        //    textFile << encoded;
-        //}
-        //textFile.close();
+        //OUTPUT encoded.txt FILE
+        messageArg+=".encoded"; //append encoded file onto message.txt
+        textFile.open(messageArg, ios::out); //open outgoing file
+        if (textFile.is_open()){
+           textFile << encoded;
+        }
+        textFile.close();
     }
     else if (argv[1]=="decode"){//else if decode command
         //OPEN ALPHABET FILE AND PUT INTO STRING
-        alphabetFile.open(argv[2], ios::in);
+        alphabetFile.open(alphabetArg, ios::in);
         if (alphabetFile.is_open()){
            getline(alphabetFile, alphabet); //get single line in file to get alphabet
         }
         alphabetFile.close(); //remember to close the file
 
         //OPEN ENCODED FILE AND PUT INTO STRING
-        textFile.open(argv[3], ios::in); //open file
+        textFile.open(encodedArg, ios::in); //open file
         if(textFile.is_open()){ 
             while (getline(textFile, message)){
-                message+=message; //append each line to the message string
+                //message+=message; //append each line to the message string
             }
         }
         textFile.close();
 
         AdaptiveHuffman d(alphabet);
         decoded=d.decode(message);
+        cout << decoded << endl;
 
-        //OUTPUT DECODED FILE
-        //textFile.open(argv[3], ios::out); //open outgoing file
-        //if (textFile.is_open()){
-        //    textFile << decoded;
-        //}
-        //textFile.close();
+        //OUTPUT decoded.txt FILE
+        int argLength = encodedArg.length();
+        encodedArg.erase(argLength, argLength-8); //detach .encoded from end of arg to (end - 8)
+        encodedArg+=".decoded"; //append .decoded to encoded.txt file
+        textFile.open(encodedArg, ios::out); //open outgoing file
+        if (textFile.is_open()){
+           textFile << decoded;
+        }
+        textFile.close();
     }
     else{
         cout << "Wrong command given, enter encode OR decode as 2nd arguemnt!!" << endl;
@@ -150,8 +162,8 @@ int main(int argc, char const *argv[]){
     
     // decoded=d.decode(encoded);
 
-    cout << encoded << endl;
-    cout << decoded << endl;
+    //cout << encoded << endl;
+    //cout << decoded << endl;
 
     return 0;
 }
