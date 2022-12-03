@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
     {
-        "name": "GDB Launch Clang++",
+        "name": "C/C++: clang++ build and debug active file (DEBUG)",
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/${fileBasenameNoExtension}",
