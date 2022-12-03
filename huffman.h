@@ -119,20 +119,42 @@ public:
         //else (if no violation)
         //  return node 
     void createAlphabetArray();
+        //creates alphabet array from alphabet given
+        //makes alphabet elements point to zero node by defualt
     bool validateAlphabet(int);
-    bool checkLeader();
+        //validates if character is in alphabet
+        //returns true if in alphabet array
+        //otherwise false
     string decimalToBinary(int);
+        //converts decimal value to 8 bit binary number as a string
     void pathToZeroNode(AdaptiveHuffmanNode*);
         //start from zero node and work your way up to the root node
     string reverseString(string);
+        //reverse order of string
     void incrementParent(AdaptiveHuffmanNode*);
+        //increments parent all the way up to the root
+        //checks leader and sibiling property before incrementing
     AdaptiveHuffmanNode* checkLeader(AdaptiveHuffmanNode*);
+        //checks if leader is parent or not
+        //if leader is parent, just increment
+        //if leader is not parent, swap nodes
     AdaptiveHuffmanNode* getLeader(AdaptiveHuffmanNode*);
         //gets leader that is in front
     void swapNodes(AdaptiveHuffmanNode*, AdaptiveHuffmanNode*);
+        //swap nodes if leader is not parent
+        //5 cases:
+        // -siblings
+        // -right right
+        // -left left
+        // -right left
+        // -left right
     void characterAgain(int);
+        //if character is encountered again, increment character node
+        //use alphabet_arr pointer array to get to character node
+        //check sibling property
+        //then increment parent
     void pathToCharacterAgain(AdaptiveHuffmanNode*);
-    //int binaryToInt(string); //can use stoi() - string to int function
+        //int binaryToInt(string); //can use stoi() - string to int function
 
 };
 
